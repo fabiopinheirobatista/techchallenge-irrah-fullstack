@@ -1,0 +1,53 @@
+# IntelliJ IDEA
+.idea/
+**/.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+**/.vscode/
+
+# Maven
+target/
+**/target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+
+# Gradle / Build
+build/
+**/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Node
+node_modules/
+**/node_modules/
+
+# STS (Eclipse)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+techchallenge-irrah-backend/nbproject/private/
+techchallenge-irrah-backend/nbbuild/
+techchallenge-irrah-backend/dist/
+techchallenge-irrah-backend/nbdist/
+techchallenge-irrah-backend/.nb-gradle/
+
+# Local
+.local/
+
+# Logs
+*.log
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
