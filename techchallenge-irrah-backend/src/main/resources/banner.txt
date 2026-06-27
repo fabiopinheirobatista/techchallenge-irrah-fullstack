@@ -11,5 +11,5 @@
                                       
 :: Techchallenge Irrah Backend ::
 
-- Java Version:        ${java.version}
+- Java Version:        @java.version.configured@
 - Spring Boot Version: ${spring-boot.version}
