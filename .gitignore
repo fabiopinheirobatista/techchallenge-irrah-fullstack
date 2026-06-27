@@ -1,0 +1,3 @@
+# Ignore local folders
+local/
+.local/
