@@ -51,8 +51,10 @@ public class ConversationService {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Client not found"));
         Recipient recipient = recipientRepository.findById(recipientId)
-                .filter(Recipient::isActive)
-                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Active recipient not found"));
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Recipient not found"));
+        if (!recipient.isActive()) {
+            throw new ApiException(HttpStatus.NOT_FOUND, "Active recipient not found");
+        }
         return ConversationResponse.from(conversationRepository.save(new Conversation(client, recipient)));
     }
 

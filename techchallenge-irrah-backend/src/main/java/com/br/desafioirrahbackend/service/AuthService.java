@@ -48,7 +48,7 @@ public class AuthService {
     @Transactional
     public void logout(String rawToken) {
         try {
-            tokenRepository.findById(UUID.fromString(rawToken)).ifPresent(AuthToken::revoke);
+            tokenRepository.findById(UUID.fromString(rawToken)).ifPresent(token -> token.revoke());
         } catch (IllegalArgumentException ignored) {
             throw new ApiException(HttpStatus.UNAUTHORIZED, "Invalid authentication token");
         }
