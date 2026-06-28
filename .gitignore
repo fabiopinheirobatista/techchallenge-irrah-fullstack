@@ -25,6 +25,7 @@ build/
 # Node
 node_modules/
 **/node_modules/
+.angular-cli-temp/
 
 # STS (Eclipse)
 .apt_generated

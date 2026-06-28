@@ -4,22 +4,24 @@
 [![Frontend CI](https://github.com/fabiopinheirobatista/techchallenge-irrah-fullstack/actions/workflows/frontend-ci.yml/badge.svg?branch=developer)](https://github.com/fabiopinheirobatista/techchallenge-irrah-fullstack/actions/workflows/frontend-ci.yml)
 [![Docker](https://github.com/fabiopinheirobatista/techchallenge-irrah-fullstack/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/fabiopinheirobatista/techchallenge-irrah-fullstack/actions/workflows/docker-publish.yml)
 
-Backend da plataforma de mensagens BCB, com autenticação, clientes pré e pós-pagos, conversas, fila persistente com prioridade e histórico financeiro. O frontend será implementado na próxima etapa do plano.
+Aplicação fullstack de mensagens BCB, com autenticação, clientes pré e pós-pagos, conversas, fila persistente com prioridade, histórico financeiro e interface responsiva de chat.
 
 ## Tecnologias
 
 - Java 21, Spring Boot 4 e Spring Security
 - Spring Data JPA, PostgreSQL 17 e Flyway
-- Maven, JUnit 6, Mockito e Docker Compose
+- Angular 21, TypeScript, RxJS e SCSS
+- Maven, npm, JUnit 6, Vitest, Mockito e Docker Compose
 
 ## Executar com Docker
 
 ```bash
 cp .env.example .env
-docker compose up --build postgres backend
+docker compose up --build
 ```
 
-A API ficará disponível em `http://localhost:8080`.
+- Frontend: `http://localhost:4200`
+- API: `http://localhost:8080`
 
 Credenciais de desenvolvimento criadas pelo Flyway:
 
@@ -55,8 +57,15 @@ Mensagens normais custam R$ 0,25 e urgentes R$ 0,50. Urgentes são processadas a
 ## Testes
 
 ```bash
+# Backend
 cd techchallenge-irrah-backend
 ./mvnw --batch-mode --no-transfer-progress verify
+
+# Frontend
+cd ../techchallenge-irrah-frontend
+npm ci
+npm test
+npm run build
 ```
 
 No Windows, também é possível executar `mvn --batch-mode --no-transfer-progress verify` com Maven 3.9+ instalado.

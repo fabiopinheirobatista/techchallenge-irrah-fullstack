@@ -51,7 +51,7 @@ jobs:
 
       - name: Run tests
         if: steps.frontend.outputs.available == 'true'
-        run: npm test -- --watch=false
+        run: npm test
 
       - name: Build application
         if: steps.frontend.outputs.available == 'true'
