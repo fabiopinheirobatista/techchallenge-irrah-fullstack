@@ -96,4 +96,50 @@ public class Client {
         this.passwordHash = passwordHash;
         this.updatedAt = Instant.now();
     }
+
+    public void charge(BigDecimal cost) {
+        if (cost == null || cost.signum() <= 0) {
+            throw new IllegalArgumentException("Cost must be greater than zero");
+        }
+        if (!active || planType == null) {
+            throw new IllegalStateException("Client cannot be charged");
+        }
+        LocalDate month = LocalDate.now().withDayOfMonth(1);
+        switch (planType) {
+            case PREPAID -> {
+                if (balance.compareTo(cost) < 0) {
+                    throw new IllegalStateException("Insufficient balance");
+                }
+                balance = balance.subtract(cost);
+            }
+            case POSTPAID -> {
+                if (!month.equals(billingCycleMonth)) {
+                    billingCycleMonth = month;
+                    monthlyUsage = BigDecimal.ZERO;
+                }
+                if (monthlyUsage.add(cost).compareTo(monthlyLimit) > 0) {
+                    throw new IllegalStateException("Monthly limit exceeded");
+                }
+                monthlyUsage = monthlyUsage.add(cost);
+            }
+        }
+        updatedAt = Instant.now();
+    }
+
+    public void addCredit(BigDecimal amount) {
+        if (planType != PlanType.PREPAID || amount == null || amount.signum() <= 0) {
+            throw new IllegalArgumentException("A positive credit requires a prepaid plan");
+        }
+        balance = balance.add(amount);
+        updatedAt = Instant.now();
+    }
+
+    public void adjustMonthlyLimit(BigDecimal limit) {
+        if (planType != PlanType.POSTPAID || limit == null || limit.signum() < 0
+                || monthlyUsage.compareTo(limit) > 0) {
+            throw new IllegalArgumentException("Invalid postpaid monthly limit");
+        }
+        monthlyLimit = limit;
+        updatedAt = Instant.now();
+    }
 }

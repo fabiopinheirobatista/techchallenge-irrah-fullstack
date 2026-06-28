@@ -25,7 +25,20 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
+      - name: Check frontend availability
+        id: frontend
+        shell: bash
+        working-directory: .
+        run: |
+          if [[ -f techchallenge-irrah-frontend/package-lock.json ]]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Frontend has not been initialized yet; Node.js checks were skipped."
+          fi
+
       - name: Set up Node.js
+        if: steps.frontend.outputs.available == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: "22"
@@ -33,10 +46,13 @@ jobs:
           cache-dependency-path: techchallenge-irrah-frontend/package-lock.json
 
       - name: Install dependencies
+        if: steps.frontend.outputs.available == 'true'
         run: npm ci
 
       - name: Run tests
+        if: steps.frontend.outputs.available == 'true'
         run: npm test -- --watch=false
 
       - name: Build application
+        if: steps.frontend.outputs.available == 'true'
         run: npm run build
