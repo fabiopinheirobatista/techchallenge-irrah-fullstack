@@ -28,8 +28,9 @@ jobs:
       - name: Check frontend availability
         id: frontend
         shell: bash
+        working-directory: .
         run: |
-          if [[ -f package-lock.json ]]; then
+          if [[ -f techchallenge-irrah-frontend/package-lock.json ]]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
