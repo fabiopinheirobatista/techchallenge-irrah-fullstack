@@ -6,7 +6,8 @@
         <strong>{{ profile()?.name || auth.session()?.clientName }}</strong>
         <span>{{ profile()?.planType === 'PREPAID' ? 'Pré-pago' : 'Pós-pago' }}</span>
       </div>
-      <button class="icon-button" type="button" title="Sair" (click)="logout()">↗</button>
+      <button class="logout-button" type="button" title="Sair da aplicação" aria-label="Sair da aplicação"
+              (click)="logout()"><span aria-hidden="true">↗</span> Sair</button>
     </header>
 
     <section class="balance-card">
