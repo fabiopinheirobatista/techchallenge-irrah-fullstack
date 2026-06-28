@@ -96,4 +96,20 @@ public class Client {
         this.passwordHash = passwordHash;
         this.updatedAt = Instant.now();
     }
+
+    public void charge(BigDecimal cost) {
+        LocalDate month = LocalDate.now().withDayOfMonth(1);
+        switch (planType) {
+            case PREPAID -> {
+                if (balance.compareTo(cost) < 0) throw new IllegalStateException("Insufficient balance");
+                balance = balance.subtract(cost);
+            }
+            case POSTPAID -> {
+                if (!month.equals(billingCycleMonth)) { billingCycleMonth = month; monthlyUsage = BigDecimal.ZERO; }
+                if (monthlyUsage.add(cost).compareTo(monthlyLimit) > 0) throw new IllegalStateException("Monthly limit exceeded");
+                monthlyUsage = monthlyUsage.add(cost);
+            }
+        }
+        updatedAt = Instant.now();
+    }
 }
