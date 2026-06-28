@@ -37,8 +37,9 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: nginx:1.27-alpine
-    profiles: ["frontend"]
+    build:
+      context: ./techchallenge-irrah-frontend
+      dockerfile: Dockerfile
     ports:
       - "${FRONTEND_PORT:-4200}:80"
     depends_on:

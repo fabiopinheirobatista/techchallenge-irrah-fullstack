@@ -1,0 +1,124 @@
+<main class="shell" [class.chat-open]="selectedConversation()">
+  <aside class="sidebar">
+    <header class="sidebar-header">
+      <div class="logo">BCB</div>
+      <div class="account">
+        <strong>{{ profile()?.name || auth.session()?.clientName }}</strong>
+        <span>{{ profile()?.planType === 'PREPAID' ? 'Pré-pago' : 'Pós-pago' }}</span>
+      </div>
+      <button class="icon-button" type="button" title="Sair" (click)="logout()">↗</button>
+    </header>
+
+    <section class="balance-card">
+      <span>{{ profile()?.planType === 'PREPAID' ? 'Saldo disponível' : 'Limite disponível' }}</span>
+      <strong>{{ availableAmount() | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</strong>
+      @if (profile()?.planType === 'POSTPAID') {
+        <small>Uso mensal: {{ profile()?.monthlyUsage | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</small>
+      }
+    </section>
+
+    <div class="conversation-tools">
+      <label class="search-box">
+        <span>⌕</span>
+        <input type="search" placeholder="Buscar conversas" aria-label="Buscar conversas"
+               [value]="search()" (input)="search.set($any($event.target).value)" />
+      </label>
+      <button class="new-button" type="button" (click)="openNewConversation()">+</button>
+    </div>
+
+    <div class="list-title"><strong>Conversas</strong><span>{{ conversations().length }}</span></div>
+    <nav class="conversation-list" aria-label="Conversas">
+      @if (loadingConversations()) {
+        @for (item of [1,2,3]; track item) { <div class="conversation skeleton"></div> }
+      } @else if (!filteredConversations().length) {
+        <div class="empty-list"><strong>Nenhuma conversa</strong><span>Inicie uma conversa pelo botão +</span></div>
+      } @else {
+        @for (conversation of filteredConversations(); track trackConversation($index, conversation)) {
+          <button type="button" class="conversation"
+                  [class.active]="selectedConversation()?.id === conversation.id"
+                  (click)="selectConversation(conversation)">
+            <span class="avatar">{{ conversation.recipientName.slice(0, 1) }}</span>
+            <span class="conversation-copy">
+              <span class="conversation-top"><strong>{{ conversation.recipientName }}</strong><time>{{ conversation.lastMessageTime | date:'HH:mm' }}</time></span>
+              <span class="conversation-bottom"><span>{{ conversation.lastMessageContent || conversation.recipientContact }}</span>
+                @if (conversation.unreadCount) { <b>{{ conversation.unreadCount }}</b> }
+              </span>
+            </span>
+          </button>
+        }
+      }
+    </nav>
+  </aside>
+
+  <section class="chat-panel">
+    @if (selectedConversation(); as conversation) {
+      <header class="chat-header">
+        <button type="button" class="back-button" (click)="closeConversation()">←</button>
+        <span class="avatar large">{{ conversation.recipientName.slice(0, 1) }}</span>
+        <div><strong>{{ conversation.recipientName }}</strong><span>{{ conversation.recipientContact }}</span></div>
+        <span class="channel">{{ conversation.contactType === 'PHONE' ? 'Telefone' : 'E-mail' }}</span>
+      </header>
+
+      <div class="messages" aria-live="polite">
+        @if (loadingMessages() && !messages().length) {
+          <div class="loading-state"><span class="spinner dark"></span> Carregando histórico...</div>
+        }
+        @for (message of messages(); track trackMessage($index, message)) {
+          <article class="message" [class.outbound]="message.direction === 'OUTBOUND'" [class.urgent]="message.priority === 'URGENT'">
+            @if (message.priority === 'URGENT') { <span class="priority">Urgente</span> }
+            <p>{{ message.content }}</p>
+            <footer>
+              <time>{{ message.createdAt | date:'HH:mm' }}</time>
+              @if (message.direction === 'OUTBOUND') { <span [class.failed]="message.status === 'FAILED'">{{ statusLabel(message) }}</span> }
+            </footer>
+          </article>
+        }
+      </div>
+
+      @if (error()) { <div class="toast" role="alert"><span>{{ error() }}</span><button (click)="error.set('')">×</button></div> }
+
+      <form class="composer" [formGroup]="messageForm" (ngSubmit)="send()">
+        <div class="priority-control">
+          <button type="button" [class.active]="messageForm.controls.priority.value === 'NORMAL'"
+                  (click)="messageForm.controls.priority.setValue('NORMAL')">Normal · R$ 0,25</button>
+          <button type="button" class="urgent-option" [class.active]="messageForm.controls.priority.value === 'URGENT'"
+                  (click)="messageForm.controls.priority.setValue('URGENT')">Urgente · R$ 0,50</button>
+        </div>
+        <div class="input-row">
+          <textarea formControlName="content" rows="1" maxlength="2000" placeholder="Escreva uma mensagem..."
+                    (keydown.enter)="handleEnter($event)"></textarea>
+          <button class="send-button" type="submit" [disabled]="messageForm.invalid || sending()">
+            @if (sending()) { <span class="spinner"></span> } @else { Enviar <span>→</span> }
+          </button>
+        </div>
+      </form>
+    } @else {
+      <div class="welcome-state">
+        <div class="welcome-icon">✦</div>
+        <h1>Suas conversas, sem ruído.</h1>
+        <p>Escolha uma conversa ao lado ou inicie um novo contato para enviar uma mensagem.</p>
+        <button type="button" (click)="openNewConversation()">Iniciar conversa</button>
+      </div>
+    }
+  </section>
+
+  @if (newConversationOpen()) {
+    <div class="modal-backdrop" (click)="newConversationOpen.set(false)">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="new-title" (click)="$event.stopPropagation()">
+        <button class="modal-close" type="button" (click)="newConversationOpen.set(false)">×</button>
+        <p class="eyebrow">Novo atendimento</p><h2 id="new-title">Iniciar conversa</h2>
+        <p>Selecione um contato ativo para abrir o histórico.</p>
+        <form [formGroup]="conversationForm" (ngSubmit)="createConversation()">
+          <label for="recipient">Contato</label>
+          <select id="recipient" formControlName="recipientId">
+            <option value="" disabled>Selecione um contato</option>
+            @for (recipient of recipients(); track recipient.id) {
+              <option [value]="recipient.id">{{ recipient.name }} · {{ recipient.contact }}</option>
+            }
+          </select>
+          <button type="submit" [disabled]="conversationForm.invalid || creatingConversation()">Abrir conversa</button>
+        </form>
+      </section>
+    </div>
+  }
+</main>

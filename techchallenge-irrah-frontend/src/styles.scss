@@ -1,0 +1,21 @@
+:root {
+  --brand: #0a6b5f;
+  --brand-dark: #075047;
+  --accent: #d7f06c;
+  --accent-strong: #dff57e;
+  --ink: #17322d;
+  --muted: #70817d;
+  --line: #dce5e2;
+  --surface: #f7faf8;
+  --danger: #b63f34;
+  font-family: 'Aptos', 'Segoe UI', system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--surface);
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { min-height: 100dvh; }
+button, input, textarea, select { font-family: inherit; }
+::selection { color: #102b26; background: var(--accent); }

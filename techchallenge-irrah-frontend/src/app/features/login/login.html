@@ -1,0 +1,47 @@
+<main class="login-page">
+  <section class="brand-panel" aria-label="Apresentação Big Chat Brasil">
+    <div class="brand-mark">BCB</div>
+    <div>
+      <p class="eyebrow">Big Chat Brasil</p>
+      <h1>Conversas que chegam do jeito certo.</h1>
+      <p class="brand-copy">Gerencie contatos, prioridades e custos em um só lugar.</p>
+    </div>
+    <div class="signal-card">
+      <span class="signal-dot"></span>
+      <div><strong>Operação disponível</strong><small>Fila de mensagens online</small></div>
+    </div>
+  </section>
+
+  <section class="form-panel">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="mobile-brand">BCB</div>
+      <p class="eyebrow">Área do cliente</p>
+      <h2>Boas-vindas</h2>
+      <p class="helper">Entre com o CPF ou CNPJ cadastrado para acessar suas conversas.</p>
+
+      <label for="documentId">CPF ou CNPJ</label>
+      <input id="documentId" formControlName="documentId" autocomplete="username"
+             inputmode="numeric" placeholder="Somente números" />
+      @if (form.controls.documentId.touched && form.controls.documentId.invalid) {
+        <small class="field-error">Informe um documento válido.</small>
+      }
+
+      <label for="password">Senha</label>
+      <input id="password" type="password" formControlName="password" autocomplete="current-password"
+             placeholder="Sua senha" />
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="field-error">A senha deve ter ao menos 8 caracteres.</small>
+      }
+
+      @if (error()) {
+        <div class="alert" role="alert">{{ error() }}</div>
+      }
+
+      <button type="submit" [disabled]="loading()">
+        @if (loading()) { <span class="spinner"></span> Entrando... } @else { Entrar na plataforma }
+      </button>
+
+      <p class="demo-hint">Ambiente de demonstração: <strong>52998224725</strong> / <strong>Client&#64;123</strong></p>
+    </form>
+  </section>
+</main>
