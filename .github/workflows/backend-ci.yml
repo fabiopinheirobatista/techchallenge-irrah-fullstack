@@ -1,0 +1,37 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, developer]
+    paths:
+      - "techchallenge-irrah-backend/**"
+      - ".github/workflows/backend-ci.yml"
+  pull_request:
+    branches: [main, developer]
+    paths:
+      - "techchallenge-irrah-backend/**"
+      - ".github/workflows/backend-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: techchallenge-irrah-backend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: techchallenge-irrah-backend/pom.xml
+
+      - name: Run tests
+        run: ./mvnw --batch-mode --no-transfer-progress verify
