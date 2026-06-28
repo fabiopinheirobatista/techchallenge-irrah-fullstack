@@ -1,9 +1,12 @@
 package com.br.desafioirrahbackend.controller;
 
+import com.br.desafioirrahbackend.dto.AmountRequest;
 import com.br.desafioirrahbackend.dto.ClientRequest;
 import com.br.desafioirrahbackend.dto.ClientResponse;
 import com.br.desafioirrahbackend.dto.ClientUpdateRequest;
+import com.br.desafioirrahbackend.dto.FinancialTransactionResponse;
 import com.br.desafioirrahbackend.dto.PasswordChangeRequest;
+import com.br.desafioirrahbackend.service.BillingService;
 import com.br.desafioirrahbackend.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import java.util.UUID;
 public class AdminClientController {
 
     private final ClientService clientService;
+    private final BillingService billingService;
 
     @GetMapping
     public Page<ClientResponse> list(Pageable pageable) {
@@ -55,5 +59,18 @@ public class AdminClientController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void resetPassword(@PathVariable UUID id, @Valid @RequestBody PasswordChangeRequest request) {
         clientService.resetPassword(id, request);
+    }
+
+    @PostMapping("/{id}/credits")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FinancialTransactionResponse addCredit(@PathVariable UUID id,
+                                                   @Valid @RequestBody AmountRequest request) {
+        return billingService.addCredit(id, request.amount());
+    }
+
+    @PutMapping("/{id}/monthly-limit")
+    public FinancialTransactionResponse adjustMonthlyLimit(@PathVariable UUID id,
+                                                            @Valid @RequestBody AmountRequest request) {
+        return billingService.adjustMonthlyLimit(id, request.amount());
     }
 }
