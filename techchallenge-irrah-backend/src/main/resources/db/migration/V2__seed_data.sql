@@ -1,0 +1,40 @@
+INSERT INTO clients (
+    id, document_id, document_type, name, password_hash, plan_type, balance,
+    monthly_limit, monthly_usage, billing_cycle_month, role
+) VALUES
+    ('00000000-0000-0000-0000-000000000001', '11222333000181', 'CNPJ', 'BCB Administrator',
+     crypt('Admin@123', gen_salt('bf', 10)), NULL, NULL, NULL, NULL, NULL, 'ADMIN'),
+    ('10000000-0000-0000-0000-000000000001', '52998224725', 'CPF', 'Ana Silva',
+     crypt('Client@123', gen_salt('bf', 10)), 'PREPAID', 50.00, NULL, NULL, NULL, 'CLIENT'),
+    ('10000000-0000-0000-0000-000000000002', '11144477735', 'CPF', 'Bruno Costa',
+     crypt('Client@123', gen_salt('bf', 10)), 'POSTPAID', NULL, 100.00, 0.50,
+     date_trunc('month', CURRENT_DATE)::DATE, 'CLIENT'),
+    ('10000000-0000-0000-0000-000000000003', '11444777000161', 'CNPJ', 'Carvalho Comércio Ltda.',
+     crypt('Client@123', gen_salt('bf', 10)), 'POSTPAID', NULL, 500.00, 0.25,
+     date_trunc('month', CURRENT_DATE)::DATE, 'CLIENT');
+
+INSERT INTO recipients (id, name, contact, contact_type) VALUES
+    ('20000000-0000-0000-0000-000000000001', 'Marina Souza', '+5511999990001', 'PHONE'),
+    ('20000000-0000-0000-0000-000000000002', 'Lucas Almeida', '+5511999990002', 'PHONE'),
+    ('20000000-0000-0000-0000-000000000003', 'Finance Department', 'finance@example.com', 'EMAIL');
+
+INSERT INTO conversations (id, client_id, recipient_id, created_at, updated_at) VALUES
+    ('30000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_TIMESTAMP - INTERVAL '1 hour'),
+    ('30000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000002', CURRENT_TIMESTAMP - INTERVAL '1 day', CURRENT_TIMESTAMP - INTERVAL '30 minutes'),
+    ('30000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000003', CURRENT_TIMESTAMP - INTERVAL '3 hours', CURRENT_TIMESTAMP - INTERVAL '5 minutes');
+
+INSERT INTO messages (
+    id, conversation_id, content, direction, priority, status, cost,
+    failure_reason, created_at, processing_at, sent_at, read_at
+) VALUES
+    ('40000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 'Olá, Marina!', 'OUTBOUND', 'NORMAL', 'SENT', 0.25, NULL, CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_TIMESTAMP - INTERVAL '2 days', CURRENT_TIMESTAMP - INTERVAL '2 days', NULL),
+    ('40000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000001', 'Olá! Como posso ajudar?', 'INBOUND', 'NORMAL', 'RECEIVED', 0.00, NULL, CURRENT_TIMESTAMP - INTERVAL '1 hour', NULL, NULL, NULL),
+    ('40000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000002', 'Preciso de um retorno urgente.', 'OUTBOUND', 'URGENT', 'SENT', 0.50, NULL, CURRENT_TIMESTAMP - INTERVAL '30 minutes', CURRENT_TIMESTAMP - INTERVAL '29 minutes', CURRENT_TIMESTAMP - INTERVAL '29 minutes', NULL),
+    ('40000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', 'Segue o resumo financeiro.', 'OUTBOUND', 'NORMAL', 'QUEUED', 0.25, NULL, CURRENT_TIMESTAMP - INTERVAL '5 minutes', NULL, NULL, NULL),
+    ('40000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000003', 'Mensagem de teste com falha.', 'OUTBOUND', 'NORMAL', 'FAILED', 0.25, 'Provider unavailable', CURRENT_TIMESTAMP - INTERVAL '1 hour', CURRENT_TIMESTAMP - INTERVAL '59 minutes', NULL, NULL);
+
+INSERT INTO financial_transactions (client_id, type, amount, balance_after, description, created_at) VALUES
+    ('10000000-0000-0000-0000-000000000001', 'CREDIT', 50.25, 50.25, 'Initial credit', CURRENT_TIMESTAMP - INTERVAL '3 days'),
+    ('10000000-0000-0000-0000-000000000001', 'DEBIT', -0.25, 50.00, 'Normal message charge', CURRENT_TIMESTAMP - INTERVAL '2 days'),
+    ('10000000-0000-0000-0000-000000000002', 'LIMIT_ADJUSTMENT', 100.00, NULL, 'Initial monthly limit', CURRENT_TIMESTAMP - INTERVAL '3 days'),
+    ('10000000-0000-0000-0000-000000000003', 'LIMIT_ADJUSTMENT', 500.00, NULL, 'Initial monthly limit', CURRENT_TIMESTAMP - INTERVAL '3 days');
