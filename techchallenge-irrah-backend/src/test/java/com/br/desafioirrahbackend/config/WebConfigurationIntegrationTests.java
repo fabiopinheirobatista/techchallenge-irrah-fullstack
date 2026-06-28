@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestConstructor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,7 @@ class WebConfigurationIntegrationTests {
     }
 
     @Test
+    @WithMockUser
     void shouldReturnStandardValidationError() throws Exception {
         mockMvc.perform(post("/api/test")
                         .contentType(MediaType.APPLICATION_JSON)
