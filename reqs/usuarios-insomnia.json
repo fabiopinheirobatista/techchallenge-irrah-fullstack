@@ -1,0 +1,466 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-06-28T15:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v11.0.0",
+  "resources": [
+    {
+      "_id": "wrk_bcb_usuarios",
+      "parentId": null,
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "Big Chat Brasil - Usuários",
+      "description": "Requisições para autenticar, cadastrar e alterar clientes pré-pagos e pós-pagos.",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_bcb_local",
+      "parentId": "wrk_bcb_usuarios",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "Ambiente local",
+      "data": {
+        "base_url": "http://localhost:8080",
+        "admin_token": "",
+        "cliente_pre_pago_id": "",
+        "cliente_pos_pago_id": ""
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "admin_token",
+          "cliente_pre_pago_id",
+          "cliente_pos_pago_id"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_bcb_usuarios",
+      "parentId": "wrk_bcb_usuarios",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "Cookies padrão",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "fld_autenticacao",
+      "parentId": "wrk_bcb_usuarios",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "1 - Autenticação",
+      "description": "Obtenção dos tokens utilizados nas demais requisições.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -4000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_cadastros",
+      "parentId": "wrk_bcb_usuarios",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "2 - Cadastro de usuários",
+      "description": "Cadastro administrativo de clientes pré-pagos e pós-pagos.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -3000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_alteracoes",
+      "parentId": "wrk_bcb_usuarios",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "3 - Alteração de usuários",
+      "description": "Alteração cadastral e redefinição de senha.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -2000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_financeiro",
+      "parentId": "wrk_bcb_usuarios",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "name": "4 - Configuração financeira",
+      "description": "Crédito de cliente pré-pago e limite de cliente pós-pago.",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_autenticar_admin",
+      "parentId": "fld_autenticacao",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/auth",
+      "name": "Autenticar administrador",
+      "description": "Copie o token retornado para a variável admin_token do ambiente.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"documentId\": \"11222333000181\",\n  \"password\": \"Admin@123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -3000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_autenticar_pre_pago",
+      "parentId": "fld_autenticacao",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/auth",
+      "name": "Autenticar cliente pré-pago existente",
+      "description": "Autentica o cliente pré-pago criado pela carga inicial do banco.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"documentId\": \"52998224725\",\n  \"password\": \"Client@123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_autenticar_pos_pago",
+      "parentId": "fld_autenticacao",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/auth",
+      "name": "Autenticar cliente pós-pago existente",
+      "description": "Autentica o cliente pós-pago criado pela carga inicial do banco.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"documentId\": \"11144477735\",\n  \"password\": \"Client@123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cadastrar_pre_pago",
+      "parentId": "fld_cadastros",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients",
+      "name": "Cadastrar usuário pré-pago",
+      "description": "Após o cadastro, copie o id retornado para cliente_pre_pago_id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"documentId\": \"12345678909\",\n  \"documentType\": \"CPF\",\n  \"name\": \"Cliente Pré-pago Funcional\",\n  \"password\": \"Teste@123\",\n  \"planType\": \"PREPAID\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_cadastrar_pos_pago",
+      "parentId": "fld_cadastros",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients",
+      "name": "Cadastrar usuário pós-pago",
+      "description": "Após o cadastro, copie o id retornado para cliente_pos_pago_id.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"documentId\": \"39053344705\",\n  \"documentType\": \"CPF\",\n  \"name\": \"Cliente Pós-pago Funcional\",\n  \"password\": \"Teste@123\",\n  \"planType\": \"POSTPAID\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_alterar_pre_pago",
+      "parentId": "fld_alteracoes",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients/{{ _.cliente_pre_pago_id }}",
+      "name": "Alterar usuário pré-pago",
+      "description": "Altera o nome e a situação ativa do cliente pré-pago.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Cliente Pré-pago Atualizado\",\n  \"active\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -4000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_alterar_pos_pago",
+      "parentId": "fld_alteracoes",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients/{{ _.cliente_pos_pago_id }}",
+      "name": "Alterar usuário pós-pago",
+      "description": "Altera o nome e a situação ativa do cliente pós-pago.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Cliente Pós-pago Atualizado\",\n  \"active\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -3000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_senha_pre_pago",
+      "parentId": "fld_alteracoes",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients/{{ _.cliente_pre_pago_id }}/password",
+      "name": "Redefinir senha do usuário pré-pago",
+      "description": "Redefine administrativamente a senha do cliente pré-pago.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"newPassword\": \"NovaSenha@123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_senha_pos_pago",
+      "parentId": "fld_alteracoes",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients/{{ _.cliente_pos_pago_id }}/password",
+      "name": "Redefinir senha do usuário pós-pago",
+      "description": "Redefine administrativamente a senha do cliente pós-pago.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"newPassword\": \"NovaSenha@123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_credito_pre_pago",
+      "parentId": "fld_financeiro",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients/{{ _.cliente_pre_pago_id }}/credits",
+      "name": "Adicionar crédito ao usuário pré-pago",
+      "description": "Adiciona crédito ao saldo do cliente pré-pago.",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": 50.00\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -2000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_limite_pos_pago",
+      "parentId": "fld_financeiro",
+      "modified": 1782662400000,
+      "created": 1782662400000,
+      "url": "{{ _.base_url }}/api/admin/clients/{{ _.cliente_pos_pago_id }}/monthly-limit",
+      "name": "Ajustar limite do usuário pós-pago",
+      "description": "Define o limite mensal do cliente pós-pago.",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"amount\": 150.00\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.admin_token }}"
+      },
+      "metaSortKey": -1000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    }
+  ]
+}
+
